@@ -8,6 +8,7 @@
   const combinedToggle = document.getElementById('combined-toggle');
   const spacingSlider = document.getElementById('spacing-slider');
   const spacingValue = document.getElementById('spacing-value');
+  const chartCaption = document.getElementById('chart-caption');
   const pointCount = 161;
   const positions = Array.from({ length: pointCount }, (_, i) => -4 + (8 * i) / (pointCount - 1));
   const ink = '#1a2e4a';
@@ -75,6 +76,28 @@
     chart.data.datasets = datasets;
     chart.options.animation.duration = motionPreference.matches ? 0 : 400;
     chart.update();
+    updateCaption();
+  }
+
+  function updateCaption() {
+    let state;
+    if (marking === 'on') {
+      state = 'Marking is ON, so the signal pattern is a smooth envelope for every idler setting.';
+    } else if (idler === 'none') {
+      state = combinedToggle.checked
+        ? 'The combined data are flat and show no fringes.'
+        : 'With no idler sorting, the combined signal data are flat and show no fringes.';
+    } else if (idler === 'plus' || idler === 'minus') {
+      const angle = idler === 'plus' ? '+45°' : '−45°';
+      state = combinedToggle.checked
+        ? `The ${angle} idler subset shows fringes; the overlaid combined data are flat.`
+        : `The ${angle} idler subset shows fringes.`;
+    } else {
+      state = combinedToggle.checked
+        ? 'Sorting by idler shows two complementary fringe patterns; their combined data are flat.'
+        : 'Sorting by idler shows two complementary fringe patterns.';
+    }
+    chartCaption.textContent = `Curves model relative signal detections, not individual photon paths; the fringe-spacing setting is k = ${Number(spacingSlider.value).toFixed(1)}. ${state}`;
   }
 
   motionPreference.addEventListener?.('change', event => {
