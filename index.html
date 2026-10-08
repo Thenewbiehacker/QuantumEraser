@@ -1,0 +1,134 @@
+<!-- Exhibit page markup for the Quantum Eraser interactive poster. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1ea">
+  <meta name="description" content="An interactive exhibit explaining the quantum eraser experiment.">
+  <title>Quantum Eraser — Physics Exhibit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-copy">
+      <h1>Quantum Eraser</h1>
+      <p class="subtitle">Erase the path. Restore the pattern.</p>
+    </div>
+    <div class="marks" aria-label="Exhibit partners">
+      <img src="assets/nitc-logo.png" alt="Placeholder wordmark for the National Institute of Technology Calicut">
+      <img src="assets/bhauthiki-logo.png" alt="Placeholder wordmark for Bhauthiki, the NIT Calicut physics society">
+    </div>
+  </header>
+
+  <main>
+    <section class="simulation" aria-labelledby="simulation-title">
+      <h2 id="simulation-title" class="visually-hidden">Interactive photon position simulation</h2>
+      <div class="chart-wrap">
+        <canvas id="signal-chart" role="img" aria-label="A model histogram of signal photon positions. Change the controls to compare interference patterns."></canvas>
+      </div>
+      <p class="chart-caption">Model signal-photon position distribution. Curves show relative counts across many detections; they are not individual photon paths.</p>
+
+      <div class="controls" aria-label="Simulation controls">
+        <fieldset class="control-group">
+          <legend>Which-path marking</legend>
+          <div class="segmented" role="group" aria-label="Which-path marking">
+            <button type="button" class="segment" data-marking="on" aria-pressed="false">ON</button>
+            <button type="button" class="segment is-active" data-marking="off" aria-pressed="true">OFF</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="control-group idler-control">
+          <legend>Idler measurement</legend>
+          <div class="segmented idler-segments" role="group" aria-label="Idler measurement">
+            <button type="button" class="segment is-active" data-idler="none" aria-pressed="true">None</button>
+            <button type="button" class="segment" data-idler="plus" aria-pressed="false">+45°</button>
+            <button type="button" class="segment" data-idler="minus" aria-pressed="false">−45°</button>
+            <button type="button" class="segment" data-idler="sorted" aria-pressed="false">Sorted by idler</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="control-group combined-control">
+          <legend>Show combined data</legend>
+          <label class="toggle-label" for="combined-toggle">
+            <input id="combined-toggle" type="checkbox">
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span>Overlay the sum</span>
+          </label>
+        </fieldset>
+
+        <div class="control-group spacing-control">
+          <label for="spacing-slider">Fringe spacing <output id="spacing-value" for="spacing-slider">k = 1.0</output></label>
+          <input id="spacing-slider" type="range" min="0.5" max="2.5" step="0.1" value="1">
+        </div>
+      </div>
+    </section>
+
+    <section class="reading-section states" aria-labelledby="seeing-title">
+      <h2 id="seeing-title">What you’re seeing</h2>
+      <div class="state-copy">
+        <p><strong>Marking ON.</strong> A path marker makes the two alternatives distinguishable in principle. The signal distribution is a smooth envelope with no fringes.</p>
+        <p><strong>Erasure at +45°.</strong> With marking off, measuring the idler photon at +45° sorts out one subset of signal detections. That subset has bright and dark interference fringes.</p>
+        <p><strong>Sorted by idler.</strong> Sorting detections into +45° and −45° subsets reveals two fringe patterns shifted by half a cycle. The two patterns complement each other.</p>
+        <p><strong>Combined data.</strong> When both idler outcomes are added together, the fringes cancel and the overall distribution is flat. The unsorted signal data never reveal a fringe pattern.</p>
+      </div>
+    </section>
+
+    <section class="reading-section explainer" aria-labelledby="explainer-title">
+      <h2 id="explainer-title">The experiment, step by step</h2>
+      <figure class="setup-figure">
+        <svg class="setup-diagram" viewBox="0 0 760 190" role="img" aria-labelledby="diagram-title diagram-desc" xmlns="http://www.w3.org/2000/svg">
+          <title id="diagram-title">Quantum eraser setup</title>
+          <desc id="diagram-desc">A laser pumps a BBO crystal, which emits entangled signal and idler photons. The signal travels through a double slit and polarizer to a detector. The idler travels through an analyzer to a second detector.</desc>
+          <g fill="none" stroke="#1a2e4a" stroke-width="2">
+            <path d="M74 96H165M205 96H302M338 96H508M338 96L508 47M538 96H669M538 47H669"/>
+            <rect x="38" y="76" width="36" height="40"/>
+            <path d="M166 63l39 33-39 33z" fill="#4a9bb8" stroke="#1a2e4a"/>
+            <path d="M302 65v62m13-62v22m0 18v22"/>
+            <rect x="508" y="78" width="30" height="36"/>
+            <rect x="508" y="29" width="30" height="36"/>
+            <rect x="669" y="77" width="48" height="38"/>
+            <rect x="669" y="28" width="48" height="38"/>
+          </g>
+          <g fill="#1a2e4a" font-family="Inter, sans-serif" font-size="13" text-anchor="middle">
+            <text x="56" y="143">Laser</text><text x="185" y="151">BBO crystal</text>
+            <text x="308" y="151">Double slit</text><text x="523" y="135">Polarizer</text>
+            <text x="523" y="20">Idler analyzer</text><text x="693" y="139">Signal</text><text x="693" y="20">Idler</text>
+          </g>
+          <g fill="#4a9bb8"><circle cx="262" cy="96" r="4"/><circle cx="417" cy="96" r="4"/><circle cx="417" cy="71" r="4"/></g>
+        </svg>
+        <figcaption>In this simplified layout, the signal and idler take separate paths after the crystal.</figcaption>
+      </figure>
+      <ol class="steps">
+        <li><h3>What is a quantum eraser?</h3><p>It is an experiment that tests how interference changes when information that could distinguish alternative paths is available. “Erasing” means measuring in a way that no longer reveals which path; it does not mean changing the past.</p></li>
+        <li><h3>The setup</h3><p>A laser pumps a BBO crystal, which can create entangled signal and idler photons. The signal photon reaches a double slit, then a polarizer and detector. Its idler partner travels through an analyzer to a second detector.</p></li>
+        <li><h3>Why does the pattern disappear?</h3><p>When a path marker makes the alternatives distinguishable, their probability amplitudes do not produce visible interference. The signal detections form a smooth envelope.</p></li>
+        <li><h3>How does the pattern return?</h3><p>With marking removed, idler measurements at +45° or −45° sort the signal detections into subsets. Each subset shows fringes, with opposite phases; combining them removes the fringes.</p></li>
+        <li><h3>Can this send a faster-than-light message?</h3><p>No. A signal detector alone always shows the same fringe-free distribution. The matching idler results must be compared through ordinary communication, which cannot travel faster than light.</p></li>
+        <li><h3>The key idea</h3><p class="key-idea">Interference depends on whether the path is knowable in principle, not on whether anyone looked.</p></li>
+      </ol>
+    </section>
+
+    <section class="reading-section further-reading" aria-labelledby="reading-title">
+      <h2 id="reading-title">Further reading</h2>
+      <ul>
+        <li><a href="https://doi.org/10.1103/PhysRevA.25.2208">Scully and Drühl (1982), “Quantum eraser”</a></li>
+        <li><a href="https://doi.org/10.1103/PhysRevLett.84.1">Kim et al. (1999), delayed-choice quantum eraser</a></li>
+        <!-- TODO: Replace this placeholder link with the NITC Department of Physics page URL. -->
+        <li><a href="#nitc-physics">NIT Calicut Department of Physics</a> <span class="todo-note">(page link to be added)</span></li>
+      </ul>
+      <p class="todo-visible" id="nitc-physics">TODO: The department page link will be added here.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Department of Physics, NIT Calicut · Bhauthiki.</p>
+    <p>Educational model, not a precise laboratory simulation.</p>
+  </footer>
+</body>
+</html>
